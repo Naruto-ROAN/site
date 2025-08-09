@@ -1,69 +1,48 @@
 import VAR from './var.js';
-const COLORS = {
-    light_lavender: '#C0A8E0',
-    pastel_lavender: '#9A7FD6',
-    lavender: '#785AB8',
-    dark_lavender: '#553D8C',
-    deep_lavender: '#3A2A60'
+
+const gridElement = document.getElementById('grid');
+const rolesId = new Map();
+
+for (const key in VAR.ROLES) {
+    const roleHTML = 
+        `<div class="role" id="${key}">
+            <img class="roleImg" src="./images/${VAR.ROLES[key].imageSrc}" alt="Ошибка :(">
+            ${VAR.ROLES[key].name.split(' ').join('<br>')}
+        </div>`;
+    const roleStatus = VAR.ROLES[key].player ? `Роль: <a href="${VAR.ROLES[key].player}" target="_blank"><u>Занята</u></a>` : 'Роль: Свободна';
+    rolesId.set(key, `${roleStatus}<br><br>${VAR.ROLES[key].description}`);
+    gridElement.innerHTML += roleHTML;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     const menuButtons = document.querySelectorAll('.menuButton');
     const roleButtons = document.querySelectorAll('.role');
+    const buttonStatuses = new Map();
 
     menuButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const buttonText = button.textContent;
             const content = document.getElementById('content');
             const rolesGrid = document.getElementById('grid');
-            let gridStatus = false;
-            let text = '';
+
             content.classList.add('fade-out');
+            button.id == 'ROLES' ? rolesGrid.classList.remove('hidden') : rolesGrid.classList.add('hidden');
             
-            switch (buttonText) {
-                case 'Главная':
-                    text = VAR.MENU_TEXT.MAIN;
-                    break;
-                case 'Сюжет':
-                    text = VAR.MENU_TEXT.LORE;
-                    break;
-                case 'Правила':
-                    text = VAR.MENU_TEXT.RULES;
-                    break;
-                case 'Роли':
-                    text = VAR.MENU_TEXT.ROLES;
-                    gridStatus = true;
-                    break;
-                case 'Регистрация':
-                    text = VAR.MENU_TEXT.SIGNUP;
-                    break;
-                case 'Статьи':
-                    text = VAR.MENU_TEXT.ARTICLES;
-                    break;
-                default:
-            }
-
-                    
-            gridStatus ? rolesGrid.classList.remove('hidden') : rolesGrid.classList.add('hidden');
-
             setTimeout(() => {
-                content.innerHTML = text;
+                content.innerHTML = VAR.MENU_TEXT[button.id];
                 content.classList.remove('fade-out');
             }, 150);
         });
     });
 
-    const buttonStatuses = new Map();
     roleButtons.forEach(button => {
         buttonStatuses.set(button.id, false);
 
         button.addEventListener('click', () => {
-            const roleText = button.textContent;
             const roleId = button.id;
             const roleHTML = button.innerHTML;
+
             let discriptionFontSize = screen.width <= 767 ? '9px' : 'medium';
             let roleFontSize = screen.width > 767 ? 'x-large' : 'medium'
-            let text = '';
 
             if (buttonStatuses.get(roleId)) {
                 button.classList.add('fade-out');
@@ -78,46 +57,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 buttonStatuses.delete(roleId);
                 buttonStatuses.set(roleId, false);
-            } else {
-                buttonStatuses.set(roleId, roleHTML);
+                return;
+            }
 
-                button.classList.add('fade-out');
-                console.log(123);
-                switch (roleText) {
-                    case 'ХаширамаСенджу':
-                        text = VAR.ROLE_DESCRIPTIONS.HASHIRAMA;
-                        break;
-                    case 'МадараУчиха':
-                        text = VAR.ROLE_DESCRIPTIONS.MADARA;
-                        break;
-                    case 'Муу':
-                        text = VAR.ROLE_DESCRIPTIONS.MUU;
-                        break;
-                    case 'ТобирамаСенджу':
-                        text = VAR.ROLE_DESCRIPTIONS.TOBIRAMA;
-                        break;
-                    case 'ГенгецуХозуки':
-                        text = VAR.ROLE_DESCRIPTIONS.GENGETSU;
-                        break;
-                    default:
-                        text = 'Описание роли не найдено.';
-                }
-    
-                setTimeout(() => {
-                    button.innerHTML = text;
-                    button.style.fontSize = discriptionFontSize;
-                    button.style.textAlign = 'justify';
-                    button.classList.remove('fade-out');
-                }, 150);
-            };
-            
+            buttonStatuses.set(roleId, roleHTML);
+            button.classList.add('fade-out');
+            setTimeout(() => {
+                button.innerHTML = rolesId.get(roleId);
+                button.style.fontSize = discriptionFontSize;
+                button.style.textAlign = 'justify';
+                button.classList.remove('fade-out');
+            }, 150);
         });
     })
-
-    const vkButton = document.querySelector('.vkButton');
-    if (vkButton) {
-        vkButton.addEventListener('click', function() {
-            window.open('https://vk.com/roan_role?from=groups', '_blank');
-        });
-    }
 });

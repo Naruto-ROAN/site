@@ -6,21 +6,17 @@
     --deep_blue: #040b1e; 
 }
 
-@font-face {
+/* @font-face {
     font-family: "JetBrains-Regular";
     src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
-}
-
-@font-face {
-    font-family: "JetBrains-Bold";
-    src: url('/fonts/JetBrainsMono-Bold.woff2') format('woff2');
-}
+} */
 
 * {
     margin: 0;
     transition: all 0.2s;
     box-sizing: border-box;   
-    font-family: "JetBrains-Regular";
+    /* font-family: "JetBrains-Regular"; */
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 body {
@@ -53,7 +49,8 @@ header {
     font-size: 25px;
     max-width: 100%;
     white-space: nowrap;
-    font-family: "JetBrains-Bold";
+    font-weight: bold;
+    /* font-family: "JetBrains-Bold"; */
 }
 
 .menuButton:hover {
@@ -145,7 +142,8 @@ a {
     padding: 20px;
     margin: 0px;
     position: relative;
-    font-family: "JetBrains-Bold";
+    font-weight: bold;
+    /* font-family: "JetBrains-Bold"; */
 }
 
 .role:hover {
